@@ -35,33 +35,39 @@ let snakeX,
   context.fillStyle = 'Black'; //should be first
   context.fillRect(0, 0, board.width, board.height); //gets 0 pos and goes down right 
 
-    context.fillStyle = 'Green';
-    // snakeX += velX*blockSize;
-    // snakeY += velY*blockSize;
-    context.fillRect(snakeX, snakeY, blockSize, blockSize); //draws the snake with xy pos and block default size
-
     context.fillStyle = 'Pink';
     context.fillRect(foodX, foodY, blockSize, blockSize); //draws the food with xyl
+
+    if (snakeX == foodX && snakeY == foodY) {
+        placeFood()
+    }
+
+    context.fillStyle = 'Green';
+    snakeX += velX*blockSize; //checks velocity and adds blocksize for speed 
+    snakeY += velY*blockSize;
+    context.fillRect(snakeX, snakeY, blockSize, blockSize); //draws the snake with xy pos and block default size
+
+
 }
 
-// function changeDirection(e) {
-//     if (e.code == "ArrowUp") { //up
-//         velX = 0;
-//         velY = -1;
-//     }
-//      if (e.code = "ArrowDown") { //donw
-//         velX = 0;
-//         velY = 1
-//     }
-//      else if (e.keyCode == '37') { //left
-//         velX = -1;
-//         velY = 0;
-//     }
-//     else if (e.keyCode == '39') { //right
-//         velX = 1;
-//         velY = 0;
-//     }
-// }
+function changeDirection(e) {
+    if (e.keyCode == '38' && velY != 1) { //up
+        velX = 0;
+        velY = -1;
+    }
+     else if (e.keyCode == '40' && velY != -1) { //down
+        velX = 0;
+        velY = 1;
+    }
+     else if (e.keyCode == '37' && velX != 1) { //left
+        velX = -1;
+        velY = 0;
+    }
+    else if (e.keyCode == '39' && velX != -1) { //right
+        velX = 1;
+        velY = 0;
+    }
+}
 
 function randomStart() {
     snakeX = Math.floor(Math.random() * cols)*blockSize;
