@@ -15,7 +15,9 @@ let snakeX,
     foodY,
     velX = 0,
     velY = 0,
+    pts = 0,
     snakeBody = [],
+    score = document.querySelector('.score'),
     snakeDeath = false;
 
     window.onload = () => {
@@ -28,7 +30,6 @@ let snakeX,
         placeFood();
         
         document.addEventListener('keyup', changeDirection);
-
         // update();
         setInterval(update, 1000/10);
   }
@@ -38,8 +39,14 @@ let snakeX,
     if (snakeDeath) {
         return;
     }
-  context.fillStyle = 'Black'; //should be first
-  context.fillRect(0, 0, board.width, board.height); //gets 0 pos and goes down right 
+        console.log('pts');
+
+  const grd = context.createLinearGradient(0,0, board.width, board.height);
+        grd.addColorStop(0, 'Black');
+        grd.addColorStop(1, 'White');
+
+    context.fillStyle = grd; //should be first
+    context.fillRect(0, 0, board.width, board.height); //gets 0 pos and goes down right 
 
     context.fillStyle = 'Pink';
     context.fillRect(foodX, foodY, blockSize, blockSize); //draws the food with xyl
@@ -48,18 +55,18 @@ let snakeX,
         snakeBody.push(foodX, foodY); //pushes the food to the body
         placeFood()
     }
-
     for(let i = snakeBody.length - 1; i > 0; i--) {
         snakeBody[i] = snakeBody[i - 1]; // second element goes to first
     }
     if (snakeBody.length){
-        snakeBody[0] = [snakeX, snakeY]; // updates first element 
+        snakeBody[0] = [snakeX, snakeY]; // updates first element ;
     }
 
     context.fillStyle = 'Green';
     snakeX += velX*blockSize; //checks velocity and adds blocksize for speed 
     snakeY += velY*blockSize;
     context.fillRect(snakeX, snakeY, blockSize, blockSize); //draws the snake with xy pos and block default size
+
     for (let i = 0; i < snakeBody.length; i++) {
         context.fillRect(snakeBody[i][0], snakeBody[i][1], blockSize, blockSize); //relative to push method i-1 adds foodX and i-2 adds Y 
     }
@@ -69,15 +76,17 @@ let snakeX,
     if (snakeX <0 || snakeX > cols*blockSize || snakeY < 0 || snakeY > rows*blockSize) {
         snakeDeath = true;
         alert('Game Over');
+        window.location.reload();
     }
 
     for (let i =0; i < snakeBody.length; i++) {
         if (snakeX == snakeBody[i][0] && snakeY == snakeBody[i][1]) {
             snakeDeath = true;
             alert('Game Over');
+            window.location.reload();
         }
   }
-}
+ }
 
 function changeDirection(e) {
     if (e.keyCode == '38' && velY != 1) { //up
@@ -106,4 +115,5 @@ function placeFood() {
     foodX = Math.floor(Math.random() * cols)*blockSize;
     foodY = Math.floor(Math.random() * rows)*blockSize;
 }
+score.innerText = `Score: ${pts}`;
 });
