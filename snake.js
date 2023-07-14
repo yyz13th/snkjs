@@ -1,11 +1,11 @@
 // boards
 document.addEventListener('DOMContentLoaded', () => {
+
 const blockSize =25,
     rows = 20,
     cols = 20;
 let board,
     context;
-
 
 //snake head
 
@@ -18,7 +18,11 @@ let snakeX,
     pts = 0,
     snakeBody = [],
     score = document.querySelector('.score'),
-    snakeDeath = false;
+    snakeDeath = false,
+    obstW,
+    obstH,
+    obstX,
+    obstY;
 
     window.onload = () => {
         board = document.getElementById('board');
@@ -26,7 +30,9 @@ let snakeX,
         board.width = blockSize * cols;
         context = board.getContext('2d'); // for drawing
 
+
         randomStart();
+        // obstacleOne();
         placeFood();
         
         document.addEventListener('keyup', changeDirection);
@@ -39,20 +45,34 @@ let snakeX,
     if (snakeDeath) {
         return;
     }
-        console.log('pts');
 
-  const grd = context.createLinearGradient(0,0, board.width, board.height);
-        grd.addColorStop(0, 'Black');
-        grd.addColorStop(1, 'White');
+  const grd = context.createLinearGradient(0,0, board.width, board.height); //create gradient
+        grd.addColorStop(0, '#945ff5');
+        grd.addColorStop(1, '#00a478');
 
     context.fillStyle = grd; //should be first
-    context.fillRect(0, 0, board.width, board.height); //gets 0 pos and goes down right 
+    context.fillRect(0, 0, board.width, board.height);
+    //gets 0 pos and goes down right 
+
+    //score
+
+    context.fillStyle="#533670";
+    context.shadowColor = "Black";
+    context.shadowBlur = 6;
+    context.shadowOffsetX = 6;
+    context.shadowOffsetY = 6; 
+    context.font="256px monospace";
+    context.fillText(pts, 7.5*blockSize, 12.5*blockSize);
 
     context.fillStyle = 'Pink';
     context.fillRect(foodX, foodY, blockSize, blockSize); //draws the food with xyl
 
+    // context.fillstyle = 'Blue'; //////////////////////////////////////////////////////////////////////////////////////
+    // context.fillRect(obstX, obstY, obstW, obstH); ////////////////////////////////////////////////////
+
     if (snakeX == foodX && snakeY == foodY) {
-        snakeBody.push(foodX, foodY); //pushes the food to the body
+        snakeBody.push(foodX, foodY);
+        pts += 1; //pushes the food to the body
         placeFood()
     }
     for(let i = snakeBody.length - 1; i > 0; i--) {
@@ -111,9 +131,15 @@ function randomStart() {
     snakeX = Math.floor(Math.random() * cols)*blockSize;
     snakeY = Math.floor(Math.random() * rows)*blockSize;
 }
-function placeFood() {
+function placeFood() { 
     foodX = Math.floor(Math.random() * cols)*blockSize;
     foodY = Math.floor(Math.random() * rows)*blockSize;
 }
-score.innerText = `Score: ${pts}`;
+
+function obstacleOne() {
+    obstX = blockSize * 6;
+    obstY = blockSize * 8;
+    obstW = blockSize * 9;
+    obstH = blockSize * 3;
+}
 });
